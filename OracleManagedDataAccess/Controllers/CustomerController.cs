@@ -10,7 +10,12 @@ namespace OracleManagedDataAccess.Controllers
 {
     public class CustomerController : Controller
     {
-        private ICustomService _customService = new CustomServiceImpl();
+        //private ICustomService _customService = new CustomServiceImpl();
+        private readonly ICustomService _customService;
+        public CustomerController()
+        {
+            _customService = new CustomServiceImpl();
+        }
         // GET: Customer
         public ActionResult Index()
         {
