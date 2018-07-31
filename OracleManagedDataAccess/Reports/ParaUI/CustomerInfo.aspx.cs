@@ -57,5 +57,5 @@ namespace OracleManagedDataAccess.Reports.ParaUI
             cryRpt.Load(Server.MapPath("CustomerInfoDataTable.rpt"));
             CrystalReportViewer1.ReportSource = cryRpt;
         }
-        }
+    }
 }
