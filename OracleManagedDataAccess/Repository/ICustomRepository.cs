@@ -1,6 +1,7 @@
 ﻿using OracleManagedDataAccess.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -15,5 +16,6 @@ namespace OracleManagedDataAccess.Repository
         List<Customer> GetAllCustomers();
         Customer GetCustomerById(int cusId);
         Customer GetCustomerByPhone(string cusPhone);
+        DataTable GetAllCustomersInDataTable();
     }
 }

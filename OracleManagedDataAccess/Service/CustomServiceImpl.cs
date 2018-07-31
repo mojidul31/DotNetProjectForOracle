@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using OracleManagedDataAccess.Models;
 using OracleManagedDataAccess.Repository;
+using System.Data;
 
 namespace OracleManagedDataAccess.Service
 {
@@ -43,6 +44,10 @@ namespace OracleManagedDataAccess.Service
         public Customer GetCustomerByMobile(string cusPhone)
         {
             return _customRepository.GetCustomerByPhone(cusPhone);
+        }
+        public DataTable GetAllCustomersInDataTable()
+        {
+           return _customRepository.GetAllCustomersInDataTable();
         }
     }
 }

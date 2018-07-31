@@ -186,5 +186,10 @@ namespace OracleManagedDataAccess.Controllers
                 return View();
             }
         }
+
+        public ActionResult UsingWebForms()
+        {
+            return View();
+        }
     }
 }

@@ -328,5 +328,50 @@ namespace OracleManagedDataAccess.Repository
             if (!ds.HaveAnyRows()) return new Customer();
             return GetCustomer(ds.Tables[0].Rows[0]);
         }
+        public DataTable GetAllCustomersInDataTable()
+        {
+            //DataSet ds = new DataSet();
+            DataTable table = new DataTable();
+            using (OracleConnection conn = _connectionDao.GetConnection())
+            using (var cmd = conn.CreateCommand())
+            {
+                try
+                {
+                    conn.Open();
+                    cmd.CommandText = "MY_TEST_PACKAGE.GET_ALL_CUSTOMERS";
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    OracleParameter parPrefcursor = cmd.Parameters.Add("PRC", OracleDbType.RefCursor,
+                        ParameterDirection.Output);
+
+                    OracleDataAdapter da = new OracleDataAdapter(cmd);
+                    da.Fill(table);
+                    parPrefcursor.Dispose();
+                    conn.Close();
+                }
+#if DEBUG
+                catch (OracleException oraEx)
+                {
+                    throw new DatabaseException(oraEx.Message, ExceptionConstants.CommonUserExceptionMessage);
+                }
+#endif
+                catch (Exception ex)
+                {
+                    throw new DatabaseException(ex.Message, ExceptionConstants.CommonUserExceptionMessage);
+
+                }
+
+
+            }
+            //if (table.Rows.Count>0)
+            //{
+            //    return table;               
+            //}
+            //else
+            //{
+            //    return table;
+            //}
+            return table;
+        }
     }
 }
