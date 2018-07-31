@@ -12,7 +12,7 @@ namespace OracleManagedDataAccess.Controllers
     public class CustomerController : Controller
     {
 
-        private ICustomService _customService = new CustomServiceImpl();
+        //private ICustomService _customService = new CustomServiceImpl();
 
         //private static readonly ILog log = LogManager.GetLogger(typeof(CollectionHelper));
 
