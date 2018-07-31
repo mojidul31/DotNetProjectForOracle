@@ -1,9 +1,10 @@
-﻿using OracleManagedDataAccess.Models;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
+using OracleManagedDataAccess.Models;
 using OracleManagedDataAccess.Service;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.IO;
 using System.Web.Mvc;
 
 namespace OracleManagedDataAccess.Controllers
@@ -11,6 +12,9 @@ namespace OracleManagedDataAccess.Controllers
     public class CustomerController : Controller
     {
         private ICustomService _customService = new CustomServiceImpl();
+
+        //private static readonly ILog log = LogManager.GetLogger(typeof(CollectionHelper));
+
         // GET: Customer
         public ActionResult Index()
         {
@@ -20,7 +24,40 @@ namespace OracleManagedDataAccess.Controllers
             _customerList.Customers = _customService.GetAllCustomers();
             return View(_customerList);
         }
+        public ActionResult ExportCustomers()
+        {
+            var customerList = _customService.GetAllCustomers();
+            //CustomerList _customerList = new CustomerList();
+            //_customerList.Customers = customerList;
+            List<CustomerReportDto> _customerList = new List<CustomerReportDto>();
+            CustomerReportDto customer = null;
 
+            foreach(var customers in customerList)
+            {
+                customer = new CustomerReportDto();
+                customer.CusName = customers.CusName;
+                customer.CusFatherName = customers.CusFatherName;
+                customer.CusMotherName = customers.CusMotherName;
+                customer.CusPhone = customers.CusPhone;
+                _customerList.Add(customer);
+            }
+           // _customerList = customerList;
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Reports/Report"), "CustomerInfo.rpt"));
+
+            rd.Refresh();
+            rd.SetDataSource(_customerList);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "CustomerList.pdf");
+        }
         // GET: Customer/Details/5
         public ActionResult Details(int id)
         {
