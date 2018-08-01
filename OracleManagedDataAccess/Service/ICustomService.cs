@@ -20,5 +20,6 @@ namespace OracleManagedDataAccess.Service
         Customer GetEmptyCustomerInfo();
         Customer GetCustomerByMobile(string cusPhone);
         DataTable GetAllCustomersInDataTable();
+        DataTable GetAllCustomersInDataTable(string cusName, string cusFatherName);
     }
 }

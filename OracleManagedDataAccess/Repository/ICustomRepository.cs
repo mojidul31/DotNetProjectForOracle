@@ -17,5 +17,6 @@ namespace OracleManagedDataAccess.Repository
         Customer GetCustomerById(int cusId);
         Customer GetCustomerByPhone(string cusPhone);
         DataTable GetAllCustomersInDataTable();
+        DataTable GetAllCustomersInDataTable(string cusName, string cusFatherName);
     }
 }

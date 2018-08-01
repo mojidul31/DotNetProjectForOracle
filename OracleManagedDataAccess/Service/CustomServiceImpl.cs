@@ -49,5 +49,18 @@ namespace OracleManagedDataAccess.Service
         {
            return _customRepository.GetAllCustomersInDataTable();
         }
+
+        public DataTable GetAllCustomersInDataTable(string cusName, string cusFatherName)
+        {
+            try
+            {
+                return _customRepository.GetAllCustomersInDataTable(cusName, cusFatherName);
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            
+        }
     }
 }

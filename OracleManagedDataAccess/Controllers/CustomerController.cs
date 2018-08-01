@@ -4,6 +4,7 @@ using OracleManagedDataAccess.Models;
 using OracleManagedDataAccess.Service;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Web.Mvc;
 
@@ -190,6 +191,29 @@ namespace OracleManagedDataAccess.Controllers
         public ActionResult UsingWebForms()
         {
             return View();
+        }
+
+        public ActionResult GetReportUsingParams()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult GetReportUsingParams(CustomerReportDto customerParams)
+        {
+            DataTable customers = _customService.GetAllCustomersInDataTable(customerParams.CusName, customerParams.CusFatherName);            
+            customers.Columns.RemoveAt(0);            
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Reports/Report"), "CustomerInfo.rpt"));
+            rd.Refresh();
+            rd.SetDataSource(customers);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "CustomerList.pdf");
         }
     }
 }
